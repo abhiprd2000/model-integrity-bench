@@ -1,0 +1,10 @@
+  [tiny] break-even W* = floor(167.2184 us / 3.6607 us) = 45 dirty blocks/cycle = 49.5% of nblocks (91)
+  [mid] break-even W* = floor(5882.3392 us / 4.3643 us) = 1347 dirty blocks/cycle = 39.5% of nblocks (3413)
+  [large] break-even W* = floor(42819.2264 us / 4.8468 us) = 8834 dirty blocks/cycle = 35.3% of nblocks (25044)
+
+W* = whole-file re-hash time / per-block write-update time. For W <= W* the per-block
+policy costs less than one whole-file re-hash per cycle; above W* it costs more.
+Crossover rows in results/e7_crossover.csv are measured end-to-end (N=100 cycles,
+W distinct random dirty blocks per cycle, median of 3 repetitions).
+
+run note: run conditions: Intel i5-5200U (4C/4T), AC power connected (ADP1 online=1, BAT0 status 'Not charging'), CPU governor schedutil, benchmark pinned to core 2 via taskset -c 2, no other heavy load started, Linux 7.0.0-22-generic, rustc 1.96.0 release build, 2026-09-24

@@ -1,0 +1,14 @@
+E5 method: fs::File::open + read_to_end of the real model file into a
+preallocated buffer (cleared between trials, capacity retained);
+whole = + one whole-file BLAKE3 over the bytes read; perblock = + re-hash
+every 4 KiB block and compare to precomputed leaves.
+warm = median of 7 consecutive trials, page cache hot.
+cold = median of 3 trials. Immediately before EACH trial the eviction file
+is read sequentially in 4 MiB chunks with every page touched, evicting the
+model's pages from the page cache via LRU pressure (no fadvise). The eviction
+file is on the real SSD filesystem (4 GiB, exceeding this machine's ~3.3 GiB
+page cache; /tmp is tmpfs, i.e. RAM, and would NOT evict anything) at .cache/mib-evict.bin.
+Modes are measured one per trial (each mode re-opens and reads the file itself),
+so no mode re-primes the cache for another.
+overhead_pct_vs_plain is vs the plain-read median under the same cache condition.
+run note: run conditions: Intel i5-5200U (4C/4T), AC power connected (ADP1 online=1, BAT0 status 'Not charging'), CPU governor schedutil, benchmark pinned to core 2 via taskset -c 2, no other heavy load started, Linux 7.0.0-22-generic, rustc 1.96.0 release build, 2026-09-24

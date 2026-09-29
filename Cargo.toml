@@ -5,8 +5,18 @@ edition = "2024"
 
 [dependencies]
 blake3 = "1.8.7"
+sha2 = "0.10"
+memmap2 = "0.9"
 
 [profile.release]
 opt-level = 3
 lto = true
 codegen-units = 1
+
+[[bin]]
+name = "experiments"
+path = "src/experiments.rs"
+
+[[bin]]
+name = "model-integrity-bench"
+path = "src/main.rs"
