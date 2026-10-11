@@ -1,0 +1,5 @@
+scenario,writer_updates,reader_threads,duration_s,total_reads,failed_reads,sig_failures,version_regressions,reads_per_s_total,reads_per_s_per_thread,writer_updates_per_s,final_version,negative_control_detects_tamper
+readers_only,0,4,5.001,2571568,0,0,0,514182,128545,0,1,true
+writer_only,10000,0,0.350,0,0,0,0,0,0,28602,10001,true
+writer_plus_4_readers,10000,4,2.003,38455,0,0,0,19199,4800,4994,10001,true
+durable_writer_plus_4_readers,10000,4,922.474,430959299,0,0,0,467178,116794,11,10001,true

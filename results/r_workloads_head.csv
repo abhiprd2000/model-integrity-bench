@@ -1,0 +1,2 @@
+model,tensor_name,byte_offset,byte_len,file_len,nblocks,range_blocks,dirty_blocks,dirty_pct_of_file,unbatched_ms,batched_ms,wholefile_ms,unbatched_node_hashes,batched_node_hashes,old_root,new_root,rebuilt_root_matches_updated,new_file_audit_ok,old_file_rejected_by_new_leaves
+large,resnetv17_dense0_weight,94370512,8192000,102576593,25044,2001,2001,7.9902,9.5003,5.8542,43.7474,30015,2018,98af5758cd798154dc336447d8fcdfdf0e5cecaeef4d7fa2692a72191105f0b8,ea018bce4c7ab2ecaef78dd2ac2d2b0b01e2d3d1b0a91c03ef21086a6761f713,true,true,true

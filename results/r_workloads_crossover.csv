@@ -1,0 +1,9 @@
+model,pattern,policy,crossover_pct,bracket_lo_pct,bracket_hi_pct,basis
+mid,random,unbatched,37.0,35,50,linear interpolation between measured rows
+mid,random,batched,53.8,50,75,linear interpolation between measured rows
+mid,contiguous,unbatched,37.4,35,50,linear interpolation between measured rows
+mid,contiguous,batched,55.9,50,75,linear interpolation between measured rows
+large,random,unbatched,33.2,25,35,linear interpolation between measured rows
+large,random,batched,52.5,50,75,linear interpolation between measured rows
+large,contiguous,unbatched,33.6,25,35,linear interpolation between measured rows
+large,contiguous,batched,54.8,50,75,linear interpolation between measured rows

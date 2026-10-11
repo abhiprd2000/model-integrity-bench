@@ -1,0 +1,37 @@
+model,runtime,mode,metric,value,unit
+-,onnxruntime,-,runtime_version,1.31.0,
+-,ai-edge-litert,-,runtime_version,2.3.0,
+large,onnxruntime,verified,bytes_identical_to_plain,1,
+large,onnxruntime,plain,read_ms,61.503,ms
+large,onnxruntime,plain,session_create_ms,443.842,ms
+large,onnxruntime,plain,first_inference_ms,128.526,ms
+large,onnxruntime,plain,total_ms,633.872,ms
+large,onnxruntime,verified,read_ms,259.935,ms
+large,onnxruntime,verified,session_create_ms,452.457,ms
+large,onnxruntime,verified,first_inference_ms,127.182,ms
+large,onnxruntime,verified,total_ms,833.476,ms
+large,onnxruntime,verified,tamper_offset,51300641,byte
+large,onnxruntime,verified,tamper_exit_code,3,
+large,onnxruntime,verified,tamper_refused,1,
+large,onnxruntime,verified,tamper_runtime_constructed,0,
+large,onnxruntime,verified,tamper_detect_ms,132.086,ms
+large,onnxruntime,verified,tamper_verified_bytes_emitted_before_stop,51298304,B
+large,onnxruntime,verified,tamper_stderr,mib: block 12524 (offset 51298304) failed verification,
+large,onnxruntime,plain,tamper_control,runtime_loaded_and_ran_without_complaint,
+mid,ai-edge-litert,verified,bytes_identical_to_plain,1,
+mid,ai-edge-litert,plain,read_ms,3.817,ms
+mid,ai-edge-litert,plain,session_create_ms,6.987,ms
+mid,ai-edge-litert,plain,first_inference_ms,14.451,ms
+mid,ai-edge-litert,plain,total_ms,25.271,ms
+mid,ai-edge-litert,verified,read_ms,28.928,ms
+mid,ai-edge-litert,verified,session_create_ms,6.879,ms
+mid,ai-edge-litert,verified,first_inference_ms,14.389,ms
+mid,ai-edge-litert,verified,total_ms,50.121,ms
+mid,ai-edge-litert,verified,tamper_offset,7000297,byte
+mid,ai-edge-litert,verified,tamper_exit_code,3,
+mid,ai-edge-litert,verified,tamper_refused,1,
+mid,ai-edge-litert,verified,tamper_runtime_constructed,0,
+mid,ai-edge-litert,verified,tamper_detect_ms,32.227,ms
+mid,ai-edge-litert,verified,tamper_verified_bytes_emitted_before_stop,7000064,B
+mid,ai-edge-litert,verified,tamper_stderr,mib: block 1709 (offset 7000064) failed verification,
+mid,ai-edge-litert,plain,tamper_control,runtime_loaded_and_ran_without_complaint,

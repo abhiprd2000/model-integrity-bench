@@ -7,6 +7,7 @@ edition = "2024"
 blake3 = "1.8.7"
 sha2 = "0.10"
 memmap2 = "0.9"
+ed25519-dalek = "2"
 
 [profile.release]
 opt-level = 3
@@ -20,3 +21,23 @@ path = "src/experiments.rs"
 [[bin]]
 name = "model-integrity-bench"
 path = "src/main.rs"
+
+[lib]
+name = "mib"
+path = "src/mib.rs"
+
+[[bin]]
+name = "mib"
+path = "src/mib_cli.rs"
+
+[[bin]]
+name = "r_workloads"
+path = "src/r_workloads.rs"
+
+[[bin]]
+name = "r_root"
+path = "src/r_root.rs"
+
+[[bin]]
+name = "r_crash"
+path = "src/r_crash.rs"

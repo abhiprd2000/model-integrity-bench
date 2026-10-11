@@ -1,0 +1,9 @@
+variant,journal,strict_fsync,samples,total_us_median,total_us_min,total_us_max,prepare_us,s1_journal_us,s2_data_us,s3_tree_us,s4_root_us,s5_clear_us
+journal_spec,true,false,7,67205.6,56163.5,67427.0,351.1,32942.0,143.9,59.2,33610.3,73.4
+journal_strict,true,true,7,145420.1,112382.0,147549.1,378.3,33391.1,122.9,26553.9,56213.3,22507.7
+nojournal_spec,false,false,7,33548.2,33492.2,33672.0,347.9,0.5,91.3,53.5,33043.1,1.1
+nojournal_strict,false,true,7,89355.1,78274.3,91291.6,381.6,0.5,97.2,25161.5,54869.2,1.2
+journal_spec_n101,true,false,101,67205.4,44935.2,78389.3,348.6,32938.9,140.1,58.7,33597.3,70.2
+journal_strict_n101,true,true,101,145452.4,112189.5,167773.8,382.4,33466.6,125.7,30119.4,56473.5,22493.1
+nojournal_strict_n101,false,true,101,100368.3,78104.6,333551.7,377.3,0.5,98.2,42202.6,55148.7,1.2
+in_memory_no_io,false,false,7,4.1,,,,,,,,
