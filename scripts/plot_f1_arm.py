@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """F1 with ARM added: per-block verify (one 4 KiB block) and whole-file hash vs
-model size, for x86 (results/e1_blocksize.csv) and ARM (results_arm/, phone run).
+model size, for x86 (results/e1_blocksize.csv) and ARM (results_arm_pinned/, phone run pinned to one core).
 
 Same rows as the original F1 (block_size == 4096 of e1_blocksize.csv; size =
 nblocks * 4 KiB from e4_writepath.csv) and the same style rules as
@@ -26,6 +26,7 @@ plt.rcParams.update({
 })
 NAME = {"tiny": "DTLN", "mid": "MobileNetV2", "large": "ResNet-50"}
 MODELS = ["tiny", "mid", "large"]
+ARM_DIR = "results_arm_pinned"   # pinned run; results_arm/ was unpinned and bimodal
 rd = lambda p: list(csv.DictReader(open(ROOT / p, newline="")))
 
 
@@ -41,7 +42,7 @@ def series(root):
 
 
 mb, pb_x, wf_x = series("results")
-mb_a, pb_a, wf_a = series("results_arm")
+mb_a, pb_a, wf_a = series(ARM_DIR)
 assert mb == mb_a, "x86 and ARM must cover the same model bytes"
 
 fig, ax = plt.subplots(figsize=(3.4, 2.5), constrained_layout=True)

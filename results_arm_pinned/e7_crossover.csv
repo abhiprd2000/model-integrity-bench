@@ -1,0 +1,17 @@
+model,W,W_pct,perblock_ms,wholefile_ms,winner
+mid,34,1,21.849,1376.522,perblock
+mid,170,5,110.933,1376.522,perblock
+mid,341,10,226.456,1376.522,perblock
+mid,853,25,566.324,1376.522,perblock
+mid,1194,35,792.858,1376.522,perblock
+mid,1706,50,1117.370,1376.522,perblock
+mid,2559,75,1685.293,1376.522,wholefile
+mid,3413,100,2237.155,1376.522,wholefile
+large,250,1,185.524,10102.566,perblock
+large,1252,5,921.259,10102.566,perblock
+large,2504,10,1854.881,10102.566,perblock
+large,6261,25,4639.430,10102.566,perblock
+large,8765,35,6536.503,10102.566,perblock
+large,12522,50,9291.991,10102.566,perblock
+large,18783,75,14028.679,10102.566,wholefile
+large,25044,100,18583.950,10102.566,wholefile

@@ -1,0 +1,4 @@
+model,nblocks,tree_depth,leaf_rehash_us,leaf_plus_path_us
+tiny,91,7,4.1014,5.2014
+mid,3413,12,4.1013,5.9961
+large,25044,15,4.0938,6.4736

@@ -1,0 +1,23 @@
+  [tiny]  W=1: pred=5.201ms meas=5.246ms err=0.86%  W=10: pred=52.014ms meas=52.199ms err=0.36%  W=100: pred=520.143ms meas=521.303ms err=0.22%  W=1000: pred=5201.429ms meas=5236.578ms err=0.68%
+  [mid]  W=1: pred=5.996ms meas=6.039ms err=0.72%  W=10: pred=59.961ms meas=59.796ms err=0.28%  W=100: pred=599.609ms meas=600.673ms err=0.18%  W=1000: pred=5996.094ms meas=6021.605ms err=0.43%
+  [mid] crossover whole-file policy: 1376.5ms for 100 cycles (measured once, reused across W rows)
+  [mid] crossover W=34 (1%): perblock=21.8ms wholefile=1376.5ms -> perblock
+  [mid] crossover W=170 (5%): perblock=110.9ms wholefile=1376.5ms -> perblock
+  [mid] crossover W=341 (10%): perblock=226.5ms wholefile=1376.5ms -> perblock
+  [mid] crossover W=853 (25%): perblock=566.3ms wholefile=1376.5ms -> perblock
+  [mid] crossover W=1194 (35%): perblock=792.9ms wholefile=1376.5ms -> perblock
+  [mid] crossover W=1706 (50%): perblock=1117.4ms wholefile=1376.5ms -> perblock
+  [mid] crossover W=2559 (75%): perblock=1685.3ms wholefile=1376.5ms -> wholefile
+  [mid] crossover W=3413 (100%): perblock=2237.2ms wholefile=1376.5ms -> wholefile
+  [large]  W=1: pred=6.474ms meas=6.479ms err=0.08%  W=10: pred=64.736ms meas=64.797ms err=0.09%  W=100: pred=647.359ms meas=649.671ms err=0.36%  W=1000: pred=6473.592ms meas=6498.484ms err=0.38%
+  [large] crossover whole-file policy: 10102.6ms for 100 cycles (measured once, reused across W rows)
+  [large] crossover W=250 (1%): perblock=185.5ms wholefile=10102.6ms -> perblock
+  [large] crossover W=1252 (5%): perblock=921.3ms wholefile=10102.6ms -> perblock
+  [large] crossover W=2504 (10%): perblock=1854.9ms wholefile=10102.6ms -> perblock
+  [large] crossover W=6261 (25%): perblock=4639.4ms wholefile=10102.6ms -> perblock
+  [large] crossover W=8765 (35%): perblock=6536.5ms wholefile=10102.6ms -> perblock
+  [large] crossover W=12522 (50%): perblock=9292.0ms wholefile=10102.6ms -> perblock
+  [large] crossover W=18783 (75%): perblock=14028.7ms wholefile=10102.6ms -> wholefile
+  [large] crossover W=25044 (100%): perblock=18583.9ms wholefile=10102.6ms -> wholefile
+
+wrote ./results_pinned/ : e1_blocksize.csv e2_metadata.csv e3_blake3_vs_sha256.csv e4_writepath.csv e6_checkfreq.csv e7_predicted_vs_measured.csv e7_crossover.csv e7_summary.txt
