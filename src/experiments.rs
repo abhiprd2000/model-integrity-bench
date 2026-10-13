@@ -25,6 +25,21 @@ use std::hint::black_box;
 use std::time::Instant;
 
 const BLOCK: usize = 4096;
+
+// Paths come from the environment so the same binary runs on a phone:
+// MODELS_DIR (default ./models), RESULTS_DIR (default ./results_arm).
+fn models_dir() -> String {
+    std::env::var("MODELS_DIR").unwrap_or_else(|_| "./models".to_string())
+}
+fn results_dir() -> String {
+    std::env::var("RESULTS_DIR").unwrap_or_else(|_| "./results_arm".to_string())
+}
+fn model_path(rel: &str) -> String {
+    format!("{}/{}", models_dir(), rel.strip_prefix("models/").unwrap_or(rel))
+}
+fn rpath(name: &str) -> String {
+    format!("{}/{}", results_dir(), name)
+}
 const SWEEP: [usize; 11] = [64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
 // NOTE: /tmp is tmpfs (RAM) on this machine, so the eviction file must live on
 // the real disk. The home filesystem (SSD, 96 GB, ~15 GB free) is used instead.
@@ -119,13 +134,13 @@ fn main() {
 
     // ---- load the real model files (abort if missing: no synthetic data) ----
     let specs = [
-        ("tiny", "models/tiny.tflite"),
-        ("mid", "models/mid.tflite"),
-        ("large", "models/large.onnx"),
+        ("tiny", model_path("models/tiny.tflite")),
+        ("mid", model_path("models/mid.tflite")),
+        ("large", model_path("models/large.onnx")),
     ];
     let mut files: Vec<(&str, String, memmap2::Mmap)> = Vec::new();
     for (label, path) in specs {
-        let f = fs::File::open(path)
+        let f = fs::File::open(&path)
             .unwrap_or_else(|e| panic!("model file missing ({path}): {e} — refusing to substitute synthetic data"));
         let mmap = unsafe { memmap2::Mmap::map(&f).expect("mmap failed") };
         files.push((label, path.to_string(), mmap));
@@ -139,6 +154,10 @@ fn main() {
     }
 
     if only_load {
+        if cfg!(target_arch = "aarch64") {
+            eprintln!("E5 (cold-cache load) is skipped on aarch64 builds: it needs a 4 GiB eviction file / root drop_caches.");
+            return;
+        }
         run_e5(&files, &run_note);
         return;
     }
@@ -445,17 +464,17 @@ fn main() {
         let _ = writeln!(e7_summary, "\nrun note: {run_note}");
     }
 
-    fs::create_dir_all("results").expect("create results/");
-    fs::write("results/e1_blocksize.csv", csv_e1).unwrap();
-    fs::write("results/e2_metadata.csv", csv_e2).unwrap();
-    fs::write("results/e3_blake3_vs_sha256.csv", csv_e3).unwrap();
-    fs::write("results/e4_writepath.csv", csv_e4).unwrap();
-    fs::write("results/e6_checkfreq.csv", csv_e6).unwrap();
-    fs::write("results/e7_predicted_vs_measured.csv", csv_e7).unwrap();
-    fs::write("results/e7_crossover.csv", csv_x).unwrap();
-    fs::write("results/e7_summary.txt", e7_summary).unwrap();
+    fs::create_dir_all(results_dir()).expect("create RESULTS_DIR");
+    fs::write(rpath("e1_blocksize.csv"), csv_e1).unwrap();
+    fs::write(rpath("e2_metadata.csv"), csv_e2).unwrap();
+    fs::write(rpath("e3_blake3_vs_sha256.csv"), csv_e3).unwrap();
+    fs::write(rpath("e4_writepath.csv"), csv_e4).unwrap();
+    fs::write(rpath("e6_checkfreq.csv"), csv_e6).unwrap();
+    fs::write(rpath("e7_predicted_vs_measured.csv"), csv_e7).unwrap();
+    fs::write(rpath("e7_crossover.csv"), csv_x).unwrap();
+    fs::write(rpath("e7_summary.txt"), e7_summary).unwrap();
 
-    println!("\nwrote results/e1_blocksize.csv e2_metadata.csv e3_blake3_vs_sha256.csv e4_writepath.csv e6_checkfreq.csv e7_predicted_vs_measured.csv e7_crossover.csv e7_summary.txt");
+    println!("\nwrote {}/ : e1_blocksize.csv e2_metadata.csv e3_blake3_vs_sha256.csv e4_writepath.csv e6_checkfreq.csv e7_predicted_vs_measured.csv e7_crossover.csv e7_summary.txt", results_dir());
 }
 
 // ---- E5: model load overhead (measured) ----
@@ -601,7 +620,7 @@ fn run_e5(files: &[(&str, String, memmap2::Mmap)], run_note: &str) {
         );
     }
 
-    fs::write("results/e5_load.csv", csv).unwrap();
+    fs::write(rpath("e5_load.csv"), csv).unwrap();
     let mut note = String::new();
     let _ = writeln!(note, "E5 method: fs::File::open + read_to_end of the real model file into a");
     let _ = writeln!(note, "preallocated buffer (cleared between trials, capacity retained);");
@@ -619,6 +638,6 @@ fn run_e5(files: &[(&str, String, memmap2::Mmap)], run_note: &str) {
     if !run_note.is_empty() {
         let _ = writeln!(note, "run note: {run_note}");
     }
-    fs::write("results/e5_method.txt", note).unwrap();
-    println!("wrote results/e5_load.csv results/e5_method.txt");
+    fs::write(rpath("e5_method.txt"), note).unwrap();
+    println!("wrote {0}/e5_load.csv {0}/e5_method.txt", results_dir());
 }

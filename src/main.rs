@@ -42,6 +42,21 @@ fn xorshift(s: &mut u64) -> u64 {
     *s
 }
 
+// Paths come from the environment so the same binary runs on a phone:
+// MODELS_DIR (default ./models), RESULTS_DIR (default ./results_arm).
+fn models_dir() -> String {
+    std::env::var("MODELS_DIR").unwrap_or_else(|_| "./models".to_string())
+}
+fn results_dir() -> String {
+    std::env::var("RESULTS_DIR").unwrap_or_else(|_| "./results_arm".to_string())
+}
+fn model_path(rel: &str) -> String {
+    format!("{}/{}", models_dir(), rel.strip_prefix("models/").unwrap_or(rel))
+}
+fn rpath(name: &str) -> String {
+    format!("{}/{}", results_dir(), name)
+}
+
 struct ModelSpec {
     label: &'static str,
     path: &'static str,
@@ -51,17 +66,18 @@ struct ModelSpec {
 
 struct Loaded {
     label: &'static str,
-    filename: &'static str,
+    filename: String,
     source: &'static str,
     real: bool,
     data: Vec<u8>,
 }
 
 fn load_or_synthesize(spec: &ModelSpec, out: &mut String) -> Loaded {
-    match std::fs::read(spec.path) {
+    let resolved = model_path(spec.path);
+    match std::fs::read(&resolved) {
         Ok(data) => Loaded {
             label: spec.label,
-            filename: spec.path,
+            filename: resolved,
             source: spec.source,
             real: true,
             data,
@@ -70,7 +86,7 @@ fn load_or_synthesize(spec: &ModelSpec, out: &mut String) -> Loaded {
             writeln!(
                 out,
                 "  ! download unavailable for {} ({}): falling back to SYNTHETIC {}-byte buffer",
-                spec.label, spec.path, spec.synthetic_target_size
+                spec.label, resolved, spec.synthetic_target_size
             )
             .unwrap();
             let mut seed: u64 = 0x9E3779B97F4A7C15 ^ (spec.synthetic_target_size as u64);
@@ -83,7 +99,7 @@ fn load_or_synthesize(spec: &ModelSpec, out: &mut String) -> Loaded {
             }
             Loaded {
                 label: spec.label,
-                filename: spec.path,
+                filename: resolved,
                 source: "SYNTHETIC (random-filled, download unavailable)",
                 real: false,
                 data,
@@ -197,7 +213,7 @@ fn main() {
             m.label,
             if m.real { "REAL" } else { "SYNTHETIC" },
             m.data.len(),
-            if m.real { m.filename } else { "(generated in-memory)" }
+            if m.real { m.filename.as_str() } else { "(generated in-memory)" }
         )
         .unwrap();
         writeln!(out, "         source: {}", m.source).unwrap();
@@ -536,7 +552,8 @@ fn main() {
 
     print!("{out}");
 
-    let outfile = format!("model-integrity-results-{arch}.txt");
+    std::fs::create_dir_all(results_dir()).expect("create RESULTS_DIR");
+    let outfile = rpath(&format!("model-integrity-results-{arch}.txt"));
     std::fs::write(&outfile, &out).expect("failed to write results file");
-    eprintln!("\n(results also saved to bench-native/{outfile})");
+    eprintln!("\n(results also saved to {outfile})");
 }

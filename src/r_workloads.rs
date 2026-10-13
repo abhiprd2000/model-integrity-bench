@@ -14,6 +14,21 @@ use std::fs;
 use std::hint::black_box;
 use std::time::Instant;
 
+// Paths come from the environment so the same binary runs on a phone:
+// MODELS_DIR (default ./models), RESULTS_DIR (default ./results_arm).
+fn models_dir() -> String {
+    std::env::var("MODELS_DIR").unwrap_or_else(|_| "./models".to_string())
+}
+fn results_dir() -> String {
+    std::env::var("RESULTS_DIR").unwrap_or_else(|_| "./results_arm".to_string())
+}
+fn model_path(rel: &str) -> String {
+    format!("{}/{}", models_dir(), rel.strip_prefix("models/").unwrap_or(rel))
+}
+fn rpath(name: &str) -> String {
+    format!("{}/{}", results_dir(), name)
+}
+
 const NC: usize = 100; // cycles
 const PCTS: [usize; 8] = [1, 5, 10, 25, 35, 50, 75, 100];
 
@@ -68,6 +83,7 @@ fn schedule(pattern: &str, nb: usize, w: usize, rng: &mut u64) -> Vec<usize> {
 }
 
 fn sweep() {
+    fs::create_dir_all(results_dir()).expect("create RESULTS_DIR");
     let mut csv = String::from(
         "model,pattern,W_pct,W,nblocks,cycles,unbatched_ms,batched_ms,wholefile_ms,\
          leaf_hashes_per_cycle,unbatched_node_hashes_per_cycle,batched_node_hashes_per_cycle,\
@@ -76,8 +92,8 @@ fn sweep() {
     // rows kept for the crossover computation: (model, pattern, pct, un, ba, wf)
     let mut rows: Vec<(String, String, f64, f64, f64, f64)> = Vec::new();
 
-    for (label, path) in [("mid", "models/mid.tflite"), ("large", "models/large.onnx")] {
-        let m = mmap(path);
+    for (label, path) in [("mid", model_path("models/mid.tflite")), ("large", model_path("models/large.onnx"))] {
+        let m = mmap(&path);
         let data: &[u8] = &m;
         let nb = nblocks(data.len());
         let base_leaves = leaves_of(data);
@@ -165,13 +181,18 @@ fn sweep() {
         }
     }
 
-    fs::write("results/r_workloads.csv", csv).unwrap();
-    fs::write("results/r_workloads_crossover.csv", xcsv).unwrap();
-    println!("wrote results/r_workloads.csv results/r_workloads_crossover.csv");
+    fs::write(rpath("r_workloads.csv"), csv).unwrap();
+    fs::write(rpath("r_workloads_crossover.csv"), xcsv).unwrap();
+    println!("wrote {} {}", rpath("r_workloads.csv"), rpath("r_workloads_crossover.csv"));
 }
 
 // ---- real update: ResNet-50 classifier head ----
 fn head() {
+    if cfg!(target_arch = "aarch64") {
+        eprintln!("r_workloads head is skipped on aarch64 builds: it needs the python-generated perturbed model copy.");
+        return;
+    }
+    fs::create_dir_all(results_dir()).expect("create RESULTS_DIR");
     let meta_txt = fs::read_to_string(".cache/head/head_meta.txt")
         .expect("run scripts/make_head_update.py first");
     let get = |k: &str| -> String {
@@ -186,7 +207,7 @@ fn head() {
         get("byte_offset").parse::<usize>().unwrap(),
         get("byte_len").parse::<usize>().unwrap(),
     );
-    let old_m = mmap("models/large.onnx");
+    let old_m = mmap(&model_path("models/large.onnx"));
     let new_m = mmap(&get("perturbed_path"));
     let (old, new): (&[u8], &[u8]) = (&old_m, &new_m);
     assert_eq!(old.len(), new.len());
@@ -269,6 +290,6 @@ large,{tensor},{off},{blen},{},{nb},{range_blocks},{},{:.4},{unb_ms:.4},{bat_ms:
         hex(&old_root),
         hex(&new_root),
     );
-    fs::write("results/r_workloads_head.csv", &csv).unwrap();
+    fs::write(rpath("r_workloads_head.csv"), &csv).unwrap();
     print!("{csv}");
 }
