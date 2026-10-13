@@ -41,3 +41,7 @@ path = "src/r_root.rs"
 [[bin]]
 name = "r_crash"
 path = "src/r_crash.rs"
+
+[[bin]]
+name = "r_load_cold"
+path = "src/r_load_cold.rs"

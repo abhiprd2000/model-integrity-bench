@@ -1,0 +1,37 @@
+model,runtime,mode,metric,value,unit
+-,onnxruntime,-,runtime_version,1.31.0,
+-,ai-edge-litert,-,runtime_version,2.3.0,
+large,onnxruntime,verified,bytes_identical_to_plain,1,
+large,onnxruntime,plain,read_ms,1159.788,ms
+large,onnxruntime,plain,session_create_ms,434.091,ms
+large,onnxruntime,plain,first_inference_ms,120.138,ms
+large,onnxruntime,plain,total_ms,1736.085,ms
+large,onnxruntime,verified,read_ms,1666.481,ms
+large,onnxruntime,verified,session_create_ms,418.792,ms
+large,onnxruntime,verified,first_inference_ms,122.284,ms
+large,onnxruntime,verified,total_ms,2206.259,ms
+large,onnxruntime,verified,tamper_offset,51300641,byte
+large,onnxruntime,verified,tamper_exit_code,3,
+large,onnxruntime,verified,tamper_refused,1,
+large,onnxruntime,verified,tamper_runtime_constructed,0,
+large,onnxruntime,verified,tamper_detect_ms,1124.965,ms
+large,onnxruntime,verified,tamper_verified_bytes_emitted_before_stop,51298304,B
+large,onnxruntime,verified,tamper_stderr,mib: block 12524 (offset 51298304) failed verification,
+large,onnxruntime,plain,tamper_control,runtime_loaded_and_ran_without_complaint,
+mid,ai-edge-litert,verified,bytes_identical_to_plain,1,
+mid,ai-edge-litert,plain,read_ms,251.369,ms
+mid,ai-edge-litert,plain,session_create_ms,13.453,ms
+mid,ai-edge-litert,plain,first_inference_ms,37.595,ms
+mid,ai-edge-litert,plain,total_ms,302.695,ms
+mid,ai-edge-litert,verified,read_ms,726.240,ms
+mid,ai-edge-litert,verified,session_create_ms,8.289,ms
+mid,ai-edge-litert,verified,first_inference_ms,19.133,ms
+mid,ai-edge-litert,verified,total_ms,752.686,ms
+mid,ai-edge-litert,verified,tamper_offset,7000297,byte
+mid,ai-edge-litert,verified,tamper_exit_code,3,
+mid,ai-edge-litert,verified,tamper_refused,1,
+mid,ai-edge-litert,verified,tamper_runtime_constructed,0,
+mid,ai-edge-litert,verified,tamper_detect_ms,664.979,ms
+mid,ai-edge-litert,verified,tamper_verified_bytes_emitted_before_stop,7000064,B
+mid,ai-edge-litert,verified,tamper_stderr,mib: block 1709 (offset 7000064) failed verification,
+mid,ai-edge-litert,plain,tamper_control,runtime_loaded_and_ran_without_complaint,

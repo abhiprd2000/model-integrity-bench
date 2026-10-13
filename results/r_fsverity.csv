@@ -1,0 +1,93 @@
+experiment,model,variant,cache,trials,median_ms,min_ms,max_ms,detail
+env,-,kernel,-,0,,,,7.0.0-22-generic
+env,-,kernel_config,-,0,,,,CONFIG_FS_VERITY=y;CONFIG_FS_VERITY_BUILTIN_SIGNATURES=y
+env,-,fsverity_version,-,0,,,,fsverity v1.6
+env,-,image_backing_fs,-,0,,,,/dev/sdb4 ext4
+env,-,backing_device,-,0,,,,sdb rotational=1 model=ST1000LM024 HN-M
+env,-,image_features,-,0,,,,has_journal ext_attr resize_inode dir_index orphan_file filetype extent 64bit flex_bg metadata_csum_seed sparse_super large_file huge_file dir_nlink extra_isize metadata_csum verity
+enable,-,cli_spawn_baseline(fsverity --version),warm,7,2.170,2.040,3.373,
+enable,tiny,fsverity enable sha256 4096,warm,3,5.580,5.380,5.601,file_bytes=372720;digest=sha256:cdb82dd2c154a072dac7c6adb280226008970d5d387438d5e81ba95d3793a4e3
+enable,tiny,fsverity enable sha256 4096,cold,3,624.585,493.018,699.711,file_bytes=372720;digest=sha256:cdb82dd2c154a072dac7c6adb280226008970d5d387438d5e81ba95d3793a4e3
+read,tiny,plain_copy,warm,7,0.120,0.115,0.133,file_bytes=372720;MBps=3118.9
+read,tiny,verity_copy,warm,7,0.104,0.103,0.135,file_bytes=372720;MBps=3568.1
+read,tiny,plain_copy,cold,5,30.333,1.440,73.790,file_bytes=372720;MBps=12.3
+read,tiny,verity_copy,cold,5,25.146,16.116,71.760,file_bytes=372720;MBps=14.8
+write_attempt,tiny,open O_WRONLY,-,1,,,,EPERM: Operation not permitted
+write_attempt,tiny,open O_RDWR,-,1,,,,EPERM: Operation not permitted
+write_attempt,tiny,open O_WRONLY|O_APPEND,-,1,,,,EPERM: Operation not permitted
+write_attempt,tiny,truncate(0),-,1,,,,EPERM: Operation not permitted
+write_attempt,tiny,write one 4 KiB block at offset 0,-,1,,,,not reached: open failed EPERM: Operation not permitted
+write_attempt,tiny,digest unchanged after attempts,-,1,,,,True
+update,tiny,step:copy,warm,3,1.177,1.127,1.440,file_bytes=372720
+update,tiny,step:write_block,warm,3,0.061,0.060,0.117,file_bytes=372720
+update,tiny,step:fsync,warm,3,131.463,121.047,245.485,file_bytes=372720
+update,tiny,step:enable,warm,3,5.561,5.525,5.944,file_bytes=372720
+update,tiny,step:rename,warm,3,0.141,0.139,0.216,file_bytes=372720
+update,tiny,step:dirsync,warm,3,127.668,127.161,194.029,file_bytes=372720
+update,tiny,TOTAL_sequence,warm,3,322.374,266.070,379.918,file_bytes=372720
+update,tiny,step:copy,cold,3,50.303,32.517,56.470,file_bytes=372720
+update,tiny,step:write_block,cold,3,0.059,0.052,0.095,file_bytes=372720
+update,tiny,step:fsync,cold,3,87.636,83.216,135.886,file_bytes=372720
+update,tiny,step:enable,cold,3,358.572,357.556,644.882,file_bytes=372720
+update,tiny,step:rename,cold,3,0.304,0.222,0.334,file_bytes=372720
+update,tiny,step:dirsync,cold,3,142.094,87.449,151.648,file_bytes=372720
+update,tiny,TOTAL_sequence,cold,3,668.446,650.304,870.544,file_bytes=372720
+enable,mid,fsverity enable sha256 4096,warm,3,60.770,59.727,61.456,file_bytes=13975904;digest=sha256:5db62b5c3be7fa734520257d0439fc0826a863ab6f7124978d041cc67845b5fd
+enable,mid,fsverity enable sha256 4096,cold,3,676.353,553.773,1162.491,file_bytes=13975904;digest=sha256:5db62b5c3be7fa734520257d0439fc0826a863ab6f7124978d041cc67845b5fd
+read,mid,plain_copy,warm,7,3.197,3.161,3.755,file_bytes=13975904;MBps=4372.1
+read,mid,verity_copy,warm,7,3.133,3.093,3.291,file_bytes=13975904;MBps=4460.9
+read,mid,plain_copy,cold,5,165.206,152.603,171.459,file_bytes=13975904;MBps=84.6
+read,mid,verity_copy,cold,5,302.089,225.159,454.760,file_bytes=13975904;MBps=46.3
+write_attempt,mid,open O_WRONLY,-,1,,,,EPERM: Operation not permitted
+write_attempt,mid,open O_RDWR,-,1,,,,EPERM: Operation not permitted
+write_attempt,mid,open O_WRONLY|O_APPEND,-,1,,,,EPERM: Operation not permitted
+write_attempt,mid,truncate(0),-,1,,,,EPERM: Operation not permitted
+write_attempt,mid,write one 4 KiB block at offset 0,-,1,,,,not reached: open failed EPERM: Operation not permitted
+write_attempt,mid,digest unchanged after attempts,-,1,,,,True
+update,mid,step:copy,warm,3,16.159,14.528,16.635,file_bytes=13975904
+update,mid,step:write_block,warm,3,0.081,0.074,0.085,file_bytes=13975904
+update,mid,step:fsync,warm,3,338.773,302.832,354.945,file_bytes=13975904
+update,mid,step:enable,warm,3,59.415,58.835,60.650,file_bytes=13975904
+update,mid,step:rename,warm,3,0.894,0.489,0.933,file_bytes=13975904
+update,mid,step:dirsync,warm,3,118.457,117.445,182.421,file_bytes=13975904
+update,mid,TOTAL_sequence,warm,3,547.328,496.827,599.497,file_bytes=13975904
+update,mid,step:copy,cold,3,334.822,226.192,339.227,file_bytes=13975904
+update,mid,step:write_block,cold,3,0.099,0.071,0.114,file_bytes=13975904
+update,mid,step:fsync,cold,3,484.118,320.099,537.786,file_bytes=13975904
+update,mid,step:enable,cold,3,413.081,385.835,502.204,file_bytes=13975904
+update,mid,step:rename,cold,3,0.337,0.277,0.396,file_bytes=13975904
+update,mid,step:dirsync,cold,3,124.624,97.676,251.991,file_bytes=13975904
+update,mid,TOTAL_sequence,cold,3,1330.087,1300.982,1387.880,file_bytes=13975904
+enable,large,fsverity enable sha256 4096,warm,3,381.044,379.972,383.939,file_bytes=102576593;digest=sha256:2e992b9f762bd114f9f4c0f743e53e8828c17782fb58d09c39c2fa7fcee9fb66
+enable,large,fsverity enable sha256 4096,cold,3,1953.240,1557.247,2014.055,file_bytes=102576593;digest=sha256:2e992b9f762bd114f9f4c0f743e53e8828c17782fb58d09c39c2fa7fcee9fb66
+read,large,plain_copy,warm,7,25.175,24.847,25.934,file_bytes=102576593;MBps=4074.6
+read,large,verity_copy,warm,7,24.782,24.682,25.198,file_bytes=102576593;MBps=4139.1
+read,large,plain_copy,cold,5,1503.402,1383.894,1671.191,file_bytes=102576593;MBps=68.2
+read,large,verity_copy,cold,5,1651.313,1471.399,1843.855,file_bytes=102576593;MBps=62.1
+write_attempt,large,open O_WRONLY,-,1,,,,EPERM: Operation not permitted
+write_attempt,large,open O_RDWR,-,1,,,,EPERM: Operation not permitted
+write_attempt,large,open O_WRONLY|O_APPEND,-,1,,,,EPERM: Operation not permitted
+write_attempt,large,truncate(0),-,1,,,,EPERM: Operation not permitted
+write_attempt,large,write one 4 KiB block at offset 0,-,1,,,,not reached: open failed EPERM: Operation not permitted
+write_attempt,large,digest unchanged after attempts,-,1,,,,True
+update,large,step:copy,warm,3,73.431,62.081,87.231,file_bytes=102576593
+update,large,step:write_block,warm,3,0.065,0.060,0.066,file_bytes=102576593
+update,large,step:fsync,warm,3,1633.037,1324.588,1634.524,file_bytes=102576593
+update,large,step:enable,warm,3,382.805,379.123,383.435,file_bytes=102576593
+update,large,step:rename,warm,3,5.529,1.340,5.682,file_bytes=102576593
+update,large,step:dirsync,warm,3,170.717,126.087,254.173,file_bytes=102576593
+update,large,TOTAL_sequence,warm,3,2218.911,2029.871,2275.189,file_bytes=102576593
+update,large,step:copy,cold,3,1583.100,1455.606,1724.028,file_bytes=102576593
+update,large,step:write_block,cold,3,0.070,0.060,0.080,file_bytes=102576593
+update,large,step:fsync,cold,3,1740.341,1654.168,1755.458,file_bytes=102576593
+update,large,step:enable,cold,3,708.210,707.570,886.174,file_bytes=102576593
+update,large,step:rename,cold,3,0.829,0.758,0.891,file_bytes=102576593
+update,large,step:dirsync,cold,3,112.810,111.736,146.117,file_bytes=102576593
+update,large,TOTAL_sequence,cold,3,4178.607,3931.115,4478.285,file_bytes=102576593
+ours_update,tiny,in-memory leaf rehash + path (BLAKE3),-,7,0.004,,,source=results/e4_writepath.csv:leaf_plus_path_us; no I/O
+ours_update,mid,in-memory leaf rehash + path (BLAKE3),-,7,0.004,,,source=results/e4_writepath.csv:leaf_plus_path_us; no I/O
+ours_update,large,in-memory leaf rehash + path (BLAKE3),-,7,0.005,,,source=results/e4_writepath.csv:leaf_plus_path_us; no I/O
+ours_update,mid,durable journal_spec (BLAKE3),-,7,67.206,56.163,67.427,"source=results/r_crash_cost.csv:total_us_median; HDD, includes fsync; model measured=mid only"
+ours_update,mid,durable journal_strict (BLAKE3),-,7,145.420,112.382,147.549,"source=results/r_crash_cost.csv:total_us_median; HDD, includes fsync; model measured=mid only"
+ours_update,mid,durable nojournal_spec (BLAKE3),-,7,33.548,33.492,33.672,"source=results/r_crash_cost.csv:total_us_median; HDD, includes fsync; model measured=mid only"
+ours_update,mid,durable nojournal_strict (BLAKE3),-,7,89.355,78.274,91.292,"source=results/r_crash_cost.csv:total_us_median; HDD, includes fsync; model measured=mid only"

@@ -1,3 +1,13 @@
+CORRECTION (2026-10-13): the "cold" rows of results/e5_load.csv are NOT cold and
+must not be cited. (1) The disk holding models/ and the eviction file is a
+Seagate ST1000LM024 5400 rpm HDD (sdb4, rotational=1), not an SSD as originally
+written below. (2) The eviction-by-reading method did not evict the models: the
+ResNet-50 "cold" plain read took 41.5 ms = 2.5 GB/s, ~30x what this disk can
+deliver (measured raw sequential O_DIRECT read: 80-96 MB/s => ~1.1-1.3 s for
+102.6 MB). SUPERSEDED by results/r_load_cold.csv (sync + drop_caches=3 before
+every cold trial, median of 5, warm median of 7). The warm rows are unaffected.
+The original text follows unchanged apart from the disk type in line 9.
+------------------------------------------------------------------------
 E5 method: fs::File::open + read_to_end of the real model file into a
 preallocated buffer (cleared between trials, capacity retained);
 whole = + one whole-file BLAKE3 over the bytes read; perblock = + re-hash
@@ -6,7 +16,7 @@ warm = median of 7 consecutive trials, page cache hot.
 cold = median of 3 trials. Immediately before EACH trial the eviction file
 is read sequentially in 4 MiB chunks with every page touched, evicting the
 model's pages from the page cache via LRU pressure (no fadvise). The eviction
-file is on the real SSD filesystem (4 GiB, exceeding this machine's ~3.3 GiB
+file is on the root ext4 filesystem, which is a 5400 rpm HDD, NOT an SSD (4 GiB, exceeding this machine's ~3.3 GiB
 page cache; /tmp is tmpfs, i.e. RAM, and would NOT evict anything) at .cache/mib-evict.bin.
 Modes are measured one per trial (each mode re-opens and reads the file itself),
 so no mode re-primes the cache for another.
