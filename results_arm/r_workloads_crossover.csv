@@ -1,0 +1,9 @@
+model,pattern,policy,crossover_pct,bracket_lo_pct,bracket_hi_pct,basis
+mid,random,unbatched,65.7,50,75,linear interpolation between measured rows
+mid,random,batched,90.1,75,100,linear interpolation between measured rows
+mid,contiguous,unbatched,66.8,50,75,linear interpolation between measured rows
+mid,contiguous,batched,93.1,75,100,linear interpolation between measured rows
+large,random,unbatched,61.1,50,75,linear interpolation between measured rows
+large,random,batched,91.5,75,100,linear interpolation between measured rows
+large,contiguous,unbatched,61.8,50,75,linear interpolation between measured rows
+large,contiguous,batched,none<=100,100,100,per-block wins at every measured W up to 100%

@@ -1,0 +1,25 @@
+date: 2026-10-13T11:05:17+05:30
+uname: Linux localhost 6.6.89-android15-8-g096cdb6ecefc-ab14358676-4k #1 SMP PREEMPT Tue Oct 28 09:04:21 UTC 2025 aarch64 Android
+nproc: 8
+ro.product.manufacturer: realme
+ro.product.model: RMX5116
+ro.soc.manufacturer: QTI
+ro.soc.model: SM7750
+ro.board.platform: sun
+ro.build.version.release: 16
+--- /proc/cpuinfo (summary of distinct lines)
+      8 CPU architecture: 8
+      8 CPU implementer	: 0x41
+      3 CPU part	: 0xd80
+      5 CPU part	: 0xd81
+      8 CPU variant	: 0x0
+      8 Features	: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm sb paca pacg dcpodp flagm2 frint i8mm bf16 dgh bti ecv afp
+--- cpufreq (may be unreadable without root)
+cpu0: walt max=1843200
+cpu1: walt max=1843200
+cpu2: walt max=1843200
+cpu3: walt max=2400000
+cpu4: walt max=2400000
+cpu5: walt max=2400000
+cpu6: walt max=2400000
+cpu7: walt max=2803200

@@ -1,0 +1,78 @@
+axiom-bench-native :: model-integrity (edge-AI)   arch=aarch64
+per-4KiB-block BLAKE3 leaf hashing, mirroring src/main.rs (whole-file vs one-block, median-of-7, warm-up)
+
+--- model sources ---
+  tiny   REAL             372720 B   ./models/tiny.tflite
+         source: DTLN noise-suppression TFLite Micro model — https://raw.githubusercontent.com/tensorflow/tflite-micro/main/tensorflow/lite/micro/examples/dtln/dtln_noise_suppression.tflite
+  mid    REAL           13975904 B   ./models/mid.tflite
+         source: MobileNetV2 TFLite (litert-community) — https://huggingface.co/litert-community/MobileNet-v2/resolve/main/mobilenet_v2.tflite
+  large  REAL          102576593 B   ./models/large.onnx
+         source: ResNet-50 v1-12 ONNX (ONNX Model Zoo) — https://github.com/onnx/models/raw/main/validated/vision/classification/resnet/model/resnet50-v1-12.onnx
+
+--- read+verify: whole-file vs one 4 KiB block ---
+model        size(B)    blocks   wholefile(ms)   block(us)        norm
+tiny          372720        91        0.510059      5.6667       1.00x
+mid         13975904      3413       18.931104      5.6772       1.00x
+large      102576593     25044      110.295961      3.6533       0.64x
+
+block_us stays ~flat (norm column near 1.00x) across tiny/mid/large: per-block verify cost
+is independent of model size, while wholefile_ms scales with size — the proportional-access effect.
+
+--- tamper demo (flip 1 byte, verify via per-block leaves) ---
+  [tiny] size=372720 B  tampered offset=127506 -> block 31/91
+         touched-block re-verify: MISMATCH (detected)  |  full-audit mismatches: 1 (expect 1, at block 31)
+         per-block: cost to detect = 1 block re-hash (~5.6667 us) -> bytes-served-corrupted = 0
+         whole-file: must re-hash entire 372720 B file every load to notice (~0.510059 ms) to catch the same tamper
+  [mid] size=13975904 B  tampered offset=2814447 -> block 687/3413
+         touched-block re-verify: MISMATCH (detected)  |  full-audit mismatches: 1 (expect 1, at block 687)
+         per-block: cost to detect = 1 block re-hash (~5.6772 us) -> bytes-served-corrupted = 0
+         whole-file: must re-hash entire 13975904 B file every load to notice (~18.931104 ms) to catch the same tamper
+  [large] size=102576593 B  tampered offset=42843022 -> block 10459/25044
+         touched-block re-verify: MISMATCH (detected)  |  full-audit mismatches: 1 (expect 1, at block 10459)
+         per-block: cost to detect = 1 block re-hash (~3.6533 us) -> bytes-served-corrupted = 0
+         whole-file: must re-hash entire 102576593 B file every load to notice (~110.295961 ms) to catch the same tamper
+
+conclusion: per-block BLAKE3 leaves localize corruption to a single ~4 KiB block at flat,
+size-independent cost, and never serve corrupted bytes; whole-file hashing must scan the
+entire model (cost grows with model size) before it can notice any tamper at all.
+
+--- write-path cost: per-block leaf+Merkle update vs whole-file re-hash ---
+the per-block scheme is not free to keep correct: every write to block i must rehash i's
+leaf AND update the Merkle path from leaf i to the root (tree_depth node hashes), so the
+root always reflects current content. This is the scheme's realization cost, reported here
+rather than left out of the picture. Compare to a whole-file scheme, whose single root can
+only be refreshed by re-hashing the entire file, even for a one-byte write.
+
+model    nblocks  tree_depth  perblock_write(us)  wholefile_write(ms)     speedup
+mid         3413          12              8.2110           18.931104     2305.6x
+large      25044          15              5.6937          110.295961    19371.6x
+
+tree_depth = ceil(log2(nblocks)) node hashes per write, on top of the 1 leaf rehash; still
+microseconds, and still flat-ish across model sizes (log growth), vs. a whole-file re-hash
+that scales linearly with model size for the exact same single-byte write.
+
+--- continuous re-verification: N cycles, write rate W (blocks dirtied per cycle) ---
+an edge node keeps the model resident and re-verifies it every cycle; weights are read-mostly,
+so only W of the model's blocks actually change per cycle (single-load comparison alone is
+attackable: inference loads the whole model anyway, so this is the policy that recurs).
+both policies are dirty-tracked: whole-file re-hashes the full file on any cycle with >=1
+dirtied block (every cycle here, since W >= 1); per-block re-hashes only the W dirtied
+leaves and walks each one's Merkle path to the root (the write-path cost measured above),
+leaving clean blocks untouched.
+cost model: wholefile_total = N * wholefile_ms   |   perblock_total = (N*W) * perblock_write_us
+
+model      W   wholefile_total(ms)    perblock_total(ms)       speedup
+mid        1             18931.104              8.210966      2305.6x
+mid       10             18931.104             82.109662       230.6x
+mid      100             18931.104            821.096615        23.1x
+large      1            110295.961              5.693693     19371.6x
+large     10            110295.961             56.936927      1937.2x
+large    100            110295.961            569.369270       193.7x
+
+thesis: a single load is a one-time cost either policy pays once regardless. Continuous
+background re-verification is where whole-file hashing becomes strictly wasteful at any
+nonzero cadence N, paying the full model size every cycle; per-block re-verify cost (leaf
+rehash + Merkle path update, the full write-path cost) tracks only the write rate W and the
+tree's log-depth, staying orders of magnitude below whole-file even at W=100 dirtied blocks.
+
+(results also saved to ./results_arm/model-integrity-results-aarch64.txt)

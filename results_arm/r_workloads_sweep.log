@@ -1,0 +1,41 @@
+[mid] random       1% W=34     unbatched=      19.4ms batched=      17.0ms wholefile=   1231.1ms (408 vs 232 node hashes/cycle)
+[mid] random       5% W=170    unbatched=     100.0ms batched=      78.8ms wholefile=   1232.2ms (2040 vs 771 node hashes/cycle)
+[mid] random      10% W=341    unbatched=     193.2ms batched=     154.2ms wholefile=   1232.5ms (4092 vs 1264 node hashes/cycle)
+[mid] random      25% W=853    unbatched=     477.5ms batched=     365.2ms wholefile=   1231.6ms (10236 vs 2129 node hashes/cycle)
+[mid] random      35% W=1194   unbatched=     668.2ms batched=     500.1ms wholefile=   1229.2ms (14328 vs 2524 node hashes/cycle)
+[mid] random      50% W=1706   unbatched=     943.6ms batched=     698.9ms wholefile=   1231.0ms (20472 vs 2938 node hashes/cycle)
+[mid] random      75% W=2559   unbatched=    1400.7ms batched=    1026.0ms wholefile=   1231.4ms (30708 vs 3286 node hashes/cycle)
+[mid] random     100% W=3413   unbatched=    2838.9ms batched=    2029.1ms wholefile=   1894.6ms (40956 vs 3418 node hashes/cycle)
+[mid] contiguous   1% W=34     unbatched=      28.4ms batched=      20.5ms wholefile=   1893.2ms (408 vs 46 node hashes/cycle)
+[mid] contiguous   5% W=170    unbatched=     141.6ms batched=     101.5ms wholefile=   1895.4ms (2040 vs 178 node hashes/cycle)
+[mid] contiguous  10% W=341    unbatched=     283.5ms batched=     203.5ms wholefile=   1892.6ms (4092 vs 349 node hashes/cycle)
+[mid] contiguous  25% W=853    unbatched=     709.1ms batched=     507.9ms wholefile=   1891.3ms (10236 vs 862 node hashes/cycle)
+[mid] contiguous  35% W=1194   unbatched=     993.1ms batched=     712.1ms wholefile=   1892.8ms (14328 vs 1206 node hashes/cycle)
+[mid] contiguous  50% W=1706   unbatched=    1420.1ms batched=    1016.1ms wholefile=   1894.0ms (20472 vs 1715 node hashes/cycle)
+[mid] contiguous  75% W=2559   unbatched=    2128.5ms batched=    1524.6ms wholefile=   1895.3ms (30708 vs 2570 node hashes/cycle)
+[mid] contiguous 100% W=3413   unbatched=    2836.4ms batched=    2030.8ms wholefile=   1889.3ms (40956 vs 3418 node hashes/cycle)
+[large] random       1% W=250    unbatched=     243.8ms batched=     192.4ms wholefile=  13869.1ms (3750 vs 1702 node hashes/cycle)
+[large] random       5% W=1252   unbatched=    1205.6ms batched=     887.9ms wholefile=  13866.5ms (18780 vs 5793 node hashes/cycle)
+[large] random      10% W=2504   unbatched=    2368.5ms batched=    1706.5ms wholefile=  13849.5ms (37560 vs 9180 node hashes/cycle)
+[large] random      25% W=6261   unbatched=    5776.1ms batched=    4054.1ms wholefile=  13846.6ms (93915 vs 15759 node hashes/cycle)
+[large] random      35% W=8765   unbatched=    8010.8ms batched=    5552.4ms wholefile=  13871.4ms (131475 vs 18489 node hashes/cycle)
+[large] random      50% W=12522  unbatched=   11367.7ms batched=    7740.7ms wholefile=  13861.8ms (187830 vs 21577 node hashes/cycle)
+[large] random      75% W=18783  unbatched=   16962.0ms batched=   11422.4ms wholefile=  13838.2ms (281745 vs 24270 node hashes/cycle)
+[large] random     100% W=25044  unbatched=   22403.9ms batched=   15086.0ms wholefile=  13849.3ms (375660 vs 25050 node hashes/cycle)
+[large] contiguous   1% W=250    unbatched=     224.1ms batched=     149.6ms wholefile=  13866.3ms (3750 vs 263 node hashes/cycle)
+[large] contiguous   5% W=1252   unbatched=    1122.3ms batched=     744.6ms wholefile=  13858.4ms (18780 vs 1263 node hashes/cycle)
+[large] contiguous  10% W=2504   unbatched=    2241.2ms batched=    1486.7ms wholefile=  13791.9ms (37560 vs 2516 node hashes/cycle)
+[large] contiguous  25% W=6261   unbatched=    5597.3ms batched=    3741.2ms wholefile=  13863.8ms (93915 vs 6274 node hashes/cycle)
+[large] contiguous  35% W=8765   unbatched=    7851.5ms batched=    5227.5ms wholefile=  13873.7ms (131475 vs 8779 node hashes/cycle)
+[large] contiguous  50% W=12522  unbatched=   11197.6ms batched=    7454.3ms wholefile=  13870.2ms (187830 vs 12532 node hashes/cycle)
+[large] contiguous  75% W=18783  unbatched=   16847.7ms batched=   11162.3ms wholefile=  13870.2ms (281745 vs 18797 node hashes/cycle)
+[large] contiguous 100% W=25044  unbatched=   21959.5ms batched=   13703.4ms wholefile=  14087.7ms (375660 vs 25050 node hashes/cycle)
+crossover mid,random,unbatched,65.7,50,75,linear interpolation between measured rows
+crossover mid,random,batched,90.1,75,100,linear interpolation between measured rows
+crossover mid,contiguous,unbatched,66.8,50,75,linear interpolation between measured rows
+crossover mid,contiguous,batched,93.1,75,100,linear interpolation between measured rows
+crossover large,random,unbatched,61.1,50,75,linear interpolation between measured rows
+crossover large,random,batched,91.5,75,100,linear interpolation between measured rows
+crossover large,contiguous,unbatched,61.8,50,75,linear interpolation between measured rows
+crossover large,contiguous,batched,none<=100,100,100,per-block wins at every measured W up to 100%
+wrote ./results_arm/r_workloads.csv ./results_arm/r_workloads_crossover.csv

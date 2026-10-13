@@ -1,0 +1,8 @@
+  [tiny] break-even W* = floor(328.8482 us / 7.2072 us) = 45 dirty blocks/cycle = 49.5% of nblocks (91)
+  [mid] break-even W* = floor(18957.3801 us / 8.2752 us) = 2290 dirty blocks/cycle = 67.1% of nblocks (3413)
+  [large] break-even W* = floor(139052.9531 us / 8.9148 us) = 15597 dirty blocks/cycle = 62.3% of nblocks (25044)
+
+W* = whole-file re-hash time / per-block write-update time. For W <= W* the per-block
+policy costs less than one whole-file re-hash per cycle; above W* it costs more.
+Crossover rows in results/e7_crossover.csv are measured end-to-end (N=100 cycles,
+W distinct random dirty blocks per cycle, median of 3 repetitions).
