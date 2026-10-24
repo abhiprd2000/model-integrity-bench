@@ -3,3 +3,5 @@ models/*
 !models/.gitignore
 .venv/
 .cache/
+demo/assets/
+demo/work/
