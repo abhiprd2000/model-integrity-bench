@@ -20,7 +20,7 @@ mkdir -p models
 wget -O models/mid.tflite "https://huggingface.co/litert-community/MobileNet-v2/resolve/main/mobilenet_v2.tflite"
 
 # 2. Setup
-alias mib=./target/release/mib
+mib(){ ./target/release/mib "$@"; }
 D=/tmp/mib_demo; M=models/mid.tflite; ID="--model-id mobilenet_v2"
 mkdir -p $D && mib keygen $D/seed $D/pub
 flip(){ b=$(xxd -s $2 -l 1 -p $1); printf "$(printf '\\x%02x' $((0x$b ^ 0x40)))" | dd of=$1 bs=1 seek=$2 conv=notrunc status=none; }
