@@ -2,6 +2,9 @@
 name = "model-integrity-bench"
 version = "0.1.0"
 edition = "2024"
+description = "Per-block integrity checking for AI model files: signed versioned Merkle tree, rollback protection, crash-safe updates"
+license = "MIT"
+repository = "https://github.com/abhiprd2000/model-integrity-bench"
 
 [dependencies]
 blake3 = "1.8.7"
